@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2020 Intel Corporation
+
+- name: load harbor-registry variables
+  include_vars: ../../../harbor_registry/controlplane/defaults/main.yml
+
+# - name: setup gitconfig
+#   include_tasks:  ../../../git_repo/tasks/gitconfig_bootstrap.yml
+
+- name: create directory for emco repo
+  file:
+    path: /opt/emco/
+    state: directory
+    mode: "0755"
+  changed_when: true
+  become: yes
+
+- name: create namespace for onap4k8s
+  command: kubectl create namespace onap4k8s
+  changed_when: true
+  ignore_errors: yes
+  become: yes
+
+- name: copy amcop manifest
+  copy:
+    src: amcop_manifest.yaml
+    dest: "{{ _emco.dest }}/deployments/manifests/amcop.yaml"
+    mode: "0744"
+  become: yes
+
+- name: rollout amcop manifest
+  command: kubectl apply -f amcop.yaml --namespace=onap4k8s
+  args:
+    chdir: "{{ _emco.dest }}/deployments/manifests/"
+  changed_when: true
+  ignore_errors: yes
+  become: yes
+
+- name: generate amcopui values.yaml and replace default
+  template:
+    src: ui_values.j2
+    dest: "{{ _emco.dest }}/deployments/helm/amcopui/values.yaml"
+    mode: "0744"
+  become: yes
+
+- name: copy ui_configmap.yaml
+  copy:
+    src: ui_configmap.yaml
+    dest: "{{ _emco.dest }}/deployments/helm/amcopui/templates/configmap.yaml"
+    mode: "0744"
+  become: yes
+
+- name: copy ui_service.yaml
+  copy:
+    src: ui_service.yaml
+    dest: "{{ _emco.dest }}/deployments/helm/amcopui/templates/service.yaml"
+    mode: "0744"
+  become: yes
+
+- name: copy ui_deployment.yaml
+  copy:
+    src: ui_deployments.yaml
+    dest: "{{ _emco.dest }}/deployments/helm/amcopui/templates/deployment.yaml"
+    mode: "0744"
+  become: yes
+
+- name: helm install amcop ui
+  command: helm install amcopui -f values.yaml -n onap4k8s
+  args:
+    chdir: "{{ _emco.dest }}/deployments/helm/amcopui/"
+  ignore_errors: yes
+  become: yes
