@@ -145,6 +145,9 @@ spec:
       labels:
         app: orchestrator
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
       containers:
         - name: orchestrator
           image: amcop/emco:stable
@@ -217,6 +220,9 @@ spec:
       labels:
         app: ncm
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
       containers:
         - name: ncm
           image: amcop/emco:stable
@@ -287,6 +293,9 @@ spec:
       labels:
         app: rsync
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
       containers:
         - name: rsync
           image: amcop/emco:stable
@@ -362,6 +371,9 @@ spec:
       labels:
         app: ovnaction
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
       containers:
         - name: ovnaction
           image: amcop/emco:stable
@@ -435,6 +447,9 @@ spec:
       labels:
         app: clm
     spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
       containers:
         - name: clm
           image: amcop/emco:stable

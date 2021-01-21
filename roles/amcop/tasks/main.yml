@@ -1,15 +1,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2020 Intel Corporation
 
-- name: load harbor-registry variables
-  include_vars: ../../../harbor_registry/controlplane/defaults/main.yml
-
 # - name: setup gitconfig
 #   include_tasks:  ../../../git_repo/tasks/gitconfig_bootstrap.yml
 
 - name: create directory for emco repo
   file:
-    path: /opt/emco/
+    path: /opt/emco/deployments/manifests/
+    state: directory
+    mode: "0755"
+  changed_when: true
+  become: yes
+
+- name: create directory for emco repo
+  file:
+    path: /opt/emco/deployments/helm/amcopui/templates/
     state: directory
     mode: "0755"
   changed_when: true
@@ -43,6 +48,13 @@
     mode: "0744"
   become: yes
 
+- name: copy ui_Chart.yaml
+  copy:
+    src: ui_Chart.yaml
+    dest: "{{ _emco.dest }}/deployments/helm/amcopui/Chart.yaml"
+    mode: "0744"
+  become: yes
+
 - name: copy ui_configmap.yaml
   copy:
     src: ui_configmap.yaml
@@ -59,13 +71,13 @@
 
 - name: copy ui_deployment.yaml
   copy:
-    src: ui_deployments.yaml
+    src: ui_deployment.yaml
     dest: "{{ _emco.dest }}/deployments/helm/amcopui/templates/deployment.yaml"
     mode: "0744"
   become: yes
 
 - name: helm install amcop ui
-  command: helm install amcopui -f values.yaml -n onap4k8s
+  command: helm install amcopui -f values.yaml . -n onap4k8s
   args:
     chdir: "{{ _emco.dest }}/deployments/helm/amcopui/"
   ignore_errors: yes
