@@ -1,0 +1,5 @@
+---
+- name: tungsten fabric is automatically pushed to the nodes
+  shell: >
+    echo "we are good here"
+  

@@ -88,7 +88,10 @@ istio_noproxy: "istio-sidecar-injector.istio-system.svc"
 # - ovn4nfv
 # NOTE - For VCAC-A setup, use `weavenet` CNI
 kubernetes_cnis:
-  - kubeovn
+  - tungstenfabric
+
+# tf pod CIDR
+tf_pod_cidr: "10.32.0.0/12"
 
 # Calico's CIDR (will be included automatically to noproxy when calico is included in kubernetes_cnis)
 calico_cidr: "10.243.0.0/16"

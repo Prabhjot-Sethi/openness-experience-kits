@@ -1,0 +1,12 @@
+
+---
+_tungsten_fabric_destdir: /opt/tungstenfabric
+
+_tf_pod_cidr: 10.32.0.0/12
+_tf_service_cidr: 10.96.0.0/12
+_tf_ip_fabric_cidr: 10.32.0.0/12
+
+_tf_controller_ip: 192.168.122.9
+
+# let it auto pick if you cannot define
+_tf_phy_intf: ""
