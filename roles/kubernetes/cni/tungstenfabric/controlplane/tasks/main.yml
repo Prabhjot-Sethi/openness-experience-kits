@@ -1,0 +1,45 @@
+
+---
+- name: install tungsten fabric
+  block:
+    - name: Create tungsten fabric directory
+      file:
+        path: "{{ _tungsten_fabric_destdir }}"
+        state: directory
+
+    - name: create manifest file from template
+      template:
+        src: "tf-manifest.j2"
+        dest: "{{ _tungsten_fabric_destdir }}/tf-manifest.yaml"
+
+    - name: apply tf manifest
+      shell: >
+        kubectl apply -f {{ _tungsten_fabric_destdir }}/tf-manifest.yaml
+
+    - name: get the controller node name
+      shell: >
+        kubectl get nodes -o wide | grep master | grep {{ _tf_controller_ip }} | awk '{print $1}'
+      register: tf_controller_name
+
+    - name: apply required labels
+      shell: >
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/config= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/configdb= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/control= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/agent= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics_alarm= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics_snmp= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analyticsdb= ;
+        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/webui=
+
+    - name: wait for vrouter to start
+      shell: >
+        set -o pipefail && 
+        kubectl get pods -n tungsten | grep -v Running
+      register: tungsten_pods
+      retries: 100
+      delay: 30
+      until:
+        - tungsten_pods.stdout_lines | length == 1
+      changed_when: false

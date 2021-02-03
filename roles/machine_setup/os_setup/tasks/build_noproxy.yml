@@ -12,6 +12,11 @@
     _base_noproxy: "{{ _base_noproxy + ',' + kubeovn_cidr }}"
   when: '"kubeovn" in kubernetes_cnis'
 
+- name: Adding tungsten fabric CIDR to noproxy
+  set_fact:
+    _base_noproxy: "{{ _base_noproxy + ',' + tf_pod_cidr }}"
+  when: '"tungstenfabric" in kubernetes_cnis'
+
 - name: Adding weavenet CIDR to noproxy
   set_fact:
     _base_noproxy: "{{ _base_noproxy + ',' + weavenet_cidr }}"

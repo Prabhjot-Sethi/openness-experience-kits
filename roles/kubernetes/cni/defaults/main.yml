@@ -14,6 +14,7 @@ _available_kubernetes_cnis:
 - calico
 - userspace
 - ovn4nfv
+- tungstenfabric
 
 _cni_normal_path:
 - .
