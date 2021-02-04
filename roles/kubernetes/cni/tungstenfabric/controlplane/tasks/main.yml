@@ -23,15 +23,15 @@
 
     - name: apply required labels
       shell: >
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/config= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/configdb= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/control= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/agent= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics_alarm= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analytics_snmp= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/analyticsdb= ;
-        kubectl label node {{ tf_controller_name.stdout }} node-role.opencontrail.org/webui=
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/config= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/configdb= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/control= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/agent= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/analytics= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/analytics_alarm= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/analytics_snmp= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/analyticsdb= ;
+        kubectl label node {{ tf_controller_name.stdout }} --overwrite node-role.opencontrail.org/webui=
 
     - name: wait for vrouter to start
       shell: >
