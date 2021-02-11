@@ -26,3 +26,4 @@
   fail:
     msg: "Hostname should be present in /etc/hosts for both ipv4 and ipv6. Refer to OpenNESS Experience Kits' how-to: section 'Setup static hostname'"
   when: grep_hosts_4.rc == 1 or grep_hosts_6.rc == 1
+  ignore_errors: yes
