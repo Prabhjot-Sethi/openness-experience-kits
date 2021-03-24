@@ -23,7 +23,7 @@ _ovn4nfv_cleanup_paths:
 - /etc/openvswitch
 - /etc/cni/net.d/ovn4nfv-k8s.d/
 
-ovn4nfv_img: "docker.io/integratedcloudnative/ovn4nfv-k8s-plugin"
+ovn4nfv_img: "docker.io/psethi/ovn4nfv-k8s-plugin"
 ovn4nfv_img_ver: "centos-v2.2.0"
 
 ovn_daemon_img: "docker.io/integratedcloudnative/ovn-images"
